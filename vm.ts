@@ -4,22 +4,22 @@ import {Op, isTinyIntOpCode, opCodeToTinyInt} from './opcodes';
 import * as utils from './utils';
 
 interface Program {
-	main: Buffer;
-	forks: Buffer[];
-	literals: any[];
+    main: Buffer;
+    forks: Buffer[];
+    literals: any[];
 }
 
 class Frame {
-	program: Program;
-	prev: Frame;
-	vector: number;
-	ip = 0;
-	stack = [];
-	
-	constructor(program: Program, vector = -1) {
-		this.program = program;
-		this.vector = vector;
-	}
+    program: Program;
+    prev: Frame;
+    vector: number;
+    ip = 0;
+    stack = [];
+    
+    constructor(program: Program, vector = -1) {
+        this.program = program;
+        this.vector = vector;
+    }
     
     code(): Buffer {
         let code = this.vector == -1 ? this.program.main : this.program.forks[this.vector];
@@ -28,18 +28,18 @@ class Frame {
 }
 
 interface DelayedFrame {
-	frame: Frame;
-	delay: number;
+    frame: Frame;
+    delay: number;
 }
 
 class VM {
-	exec(f: Frame): [any, DelayedFrame[]] {
-		return [0, []];	
-	}
-		
-	private execOne(f: Frame): [any, Frame, DelayedFrame[]] {
-		return [0, null, []];
-	}
+    exec(f: Frame): [any, DelayedFrame[]] {
+        return [0, []];	
+    }
+        
+    private execOne(f: Frame): [any, Frame, DelayedFrame[]] {
+        return [0, null, []];
+    }
 }
 
 var bi = {
