@@ -44,7 +44,7 @@ class VM {
 
 var bi = {
     log: log,
-	suspend: suspend
+    suspend: suspend
 }
 
 function exec(f: Frame): [any, Frame, DelayedFrame[]] {
