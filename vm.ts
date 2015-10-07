@@ -55,7 +55,6 @@ function exec(f: Frame): [any, Frame, DelayedFrame[]] {
         switch (op) {
             case Op.IMM:
                 {
-                    f.ip += 1;
                     let slot = readInt8(f);
                     let r = f.program.literals[slot];
                     f.stack.push(r);
@@ -116,9 +115,28 @@ function suspend(f: Frame, delay: number): [any, Frame, DelayedFrame[]] {
 }
 
 function readInt8(f: Frame): number {
+    f.ip += 1;
     var code = f.code();
     var buf = code.slice(f.ip, f.ip + 1);
     return utils.readInt32(buf); 
+}
+
+// NOTE: Do not use the `read` stuff below here please.
+
+function readInt16(f: Frame): number {
+    f.ip += 1;
+    var code = f.code();
+    var buf = code.slice(f.ip, f.ip + 2);
+    return utils.readInt32(buf);
+    // f.ip += 1;
+}
+
+function readInt32(f: Frame): number {
+    f.ip += 1;
+    var code = f.code();
+    var buf = code.slice(f.ip, f.ip + 4);
+    return utils.readInt32(buf);
+    // f.ip += 3;
 }
 
 export {
