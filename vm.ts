@@ -1,6 +1,6 @@
 /// <reference path="typings/tsd.d.ts" />
 
-import {Op,	isTinyIntOpCode, opCodeToTinyInt} from './opcodes';
+import {Op, isTinyIntOpCode, opCodeToTinyInt} from './opcodes';
 import * as utils from './utils';
 
 interface Program {
@@ -110,7 +110,7 @@ function exec(f: Frame): [any, Frame, DelayedFrame[]] {
 }
 
 export {
-	Frame,
-	Program, 
-	exec 
+    Frame,
+    Program, 
+    exec 
 }
