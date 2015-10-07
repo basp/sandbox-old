@@ -101,12 +101,6 @@ function exec(f: Frame): [any, Frame, DelayedFrame[]] {
     }
 }
 
-export {
-    Frame,
-    Program, 
-    exec 
-}
-
 function log(f: Frame, stuff: any): [any, Frame, DelayedFrame[]] {
 	console.log(stuff);
 	return [0, f, []];
@@ -117,6 +111,7 @@ function suspend(f: Frame, delay: number): [any, Frame, DelayedFrame[]] {
 		frame: f,
 		delay: delay
 	};
+    
 	return [0, null, [delayed]]
 }
 
@@ -124,4 +119,10 @@ function readInt8(f: Frame): number {
     var code = f.code();
     var buf = code.slice(f.ip, f.ip + 1);
     return utils.readInt32(buf); 
+}
+
+export {
+    Frame,
+    Program, 
+    exec 
 }
