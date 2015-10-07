@@ -104,7 +104,11 @@ describe('vm', () => {
 		expect(r).toBe(0);
 		expect(cont).toBeNull();
 		expect(delayed.length).toBe(2);
-		expect(delayed[0].delay).toBe(5);
+		
+        expect(delayed[0].delay).toBe(5);
+        expect(delayed[0].frame.vector).toBe(0);
+        
 		expect(delayed[1].delay).toBe(6);
+        expect(delayed[1].frame.vector).toBe(1);
 	});
 });
