@@ -70,15 +70,14 @@ function exec(f: Frame): [any, Frame, DelayedFrame[]] {
 					let slot = readInt8(f);
 					let r = f.program.literals[slot];
 					f.stack.push(r);
+    				break;
 				}
-				break;
 			case Op.CALL_BI:
 				{
 					let args = f.stack.pop();
 					let fname = f.stack.pop();
 					return bi[fname](f, args);
 				}
-				break;
 			case Op.FORK:
 				{
 					let delay = f.stack.pop();
@@ -88,9 +87,8 @@ function exec(f: Frame): [any, Frame, DelayedFrame[]] {
 						delay: delay
 					};
 					delayed.push(fork);
-					break;
+	       			break;
 				}
-				break;
 			case Op.RETURN:
 				{
 					let r = f.stack.pop();
