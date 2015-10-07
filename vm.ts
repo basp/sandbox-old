@@ -12,12 +12,13 @@ interface Program {
 class Frame {
 	program: Program;
 	prev: Frame;
-	vector = -1;
+	vector: number;
 	ip = 0;
 	stack = [];
 	
-	constructor(program: Program) {
+	constructor(program: Program, vector = -1) {
 		this.program = program;
+		this.vector = vector;
 	}
 }
 
@@ -59,7 +60,7 @@ var bi = {
 
 function exec(f: Frame): [any, Frame, DelayedFrame[]] {
 	var code = f.vector == -1 ? f.program.main : f.program.forks[f.vector];
-	var delayed = [];
+	var delayed: DelayedFrame[] = [];
 	while (true) {
 		let op = code[f.ip];
 		switch (op) {
@@ -79,6 +80,16 @@ function exec(f: Frame): [any, Frame, DelayedFrame[]] {
 				}
 				break;
 			case Op.FORK:
+				{
+					let delay = f.stack.pop();
+					let index = f.stack.pop();
+					let fork = {
+						frame: new Frame(f.program, index),
+						delay: delay
+					};
+					delayed.push(fork);
+					break;
+				}
 				break;
 			case Op.RETURN:
 				{

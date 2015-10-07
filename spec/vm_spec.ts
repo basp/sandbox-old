@@ -20,6 +20,7 @@ describe('vm', () => {
 		var [r, cont, delayed] = exec(f);
 		
 		expect(r).toBe(0);
+		expect(f.stack.length).toBe(0);
 		expect(cont).toBeNull();
 		expect(delayed).toEqual([]);
 	});
@@ -34,6 +35,7 @@ describe('vm', () => {
 		var [r, cont, delayed] = exec(f);
 		
 		expect(r).toBe(v);
+		expect(f.stack.length).toBe(0);
 		expect(cont).toBeNull();
 		expect(delayed).toEqual([]);
 	});
@@ -51,6 +53,7 @@ describe('vm', () => {
 		var [r, cont, delayed] = exec(f);
 		
 		expect(r).toBe(0);
+		expect(f.stack.length).toBe(1);
 		expect(f.stack[0]).toBe(v);
 		expect(delayed).toEqual([]);
 	});
@@ -72,11 +75,36 @@ describe('vm', () => {
 		
 		expect(r).toBe(0);
 		expect(cont).toBeNull();
+		expect(delayed.length).toBe(1);
 		expect(delayed[0].frame).toBe(f);
 		expect(delayed[0].delay).toBe(v);
 	});
 	
 	it('can fork frames', () => {
+		var main = new Buffer([
+			tinyIntToOpCode(0),		// fork 0
+			tinyIntToOpCode(5),		// delay 5 seconds
+			Op.FORK,
+			tinyIntToOpCode(1),		// fork 1
+			tinyIntToOpCode(6),		// delay 6 seconds
+			Op.FORK,
+			Op.RETURN0
+		]);
 		
+		var forks = [
+			new Buffer([Op.RETURN0]),
+			new Buffer([Op.RETURN0])	
+		];
+		
+		var p = newProgram(main, forks);
+		var f = new Frame(p);
+		
+		var [r, cont, delayed] = exec(f);
+		
+		expect(r).toBe(0);
+		expect(cont).toBeNull();
+		expect(delayed.length).toBe(2);
+		expect(delayed[0].delay).toBe(5);
+		expect(delayed[1].delay).toBe(6);
 	});
 });
