@@ -21,21 +21,39 @@ const enum Op {
 
 const TINY_INT_LOW = -10;
 const TINY_INT_HI = Op.LAST_OP_CODE - Op.TINY_INT_START + TINY_INT_LOW;
+
+/*
+function isOptimNumOpCode(o: OpCode): boolean {
+	return o >= OpCode.OptimNumStart;
+}
+
+function opCodeToOptimNum(o: OpCode): number {
+	return o - OpCode.OptimNumStart + OptimNumLow;
+}
+
+function optimNumToOpCode(i: number): OpCode {
+	return OpCode.OptimNumStart + i - OptimNumLow;
+}
+
+function inOptimNumRange(i: number): boolean {
+	return i >= OptimNumLow && i <= OptimNumHi;
+}
+*/
  
-function isTinyIntOpCode(op: Op): boolean {
-	return false;
+function isTinyIntOpCode(o: Op): boolean {
+	return o >= Op.TINY_INT_START;
 }
 
-function tinyIntToOpCode(n: number): Op {
-	return 0;
+function opCodeToTinyInt(o: Op): number {
+	return o - Op.TINY_INT_START + TINY_INT_LOW;
 }
 
-function opCodeToTinyInt(op: Op): number {
-	return 0;
+function tinyIntToOpCode(i: number): Op {
+	return Op.TINY_INT_START + i - TINY_INT_LOW;
 }
 
-function inTinyIntRange(n: number): boolean {
-	return false;
+function inTinyIntRange(i: number): boolean {
+	return i >= TINY_INT_LOW && i <= TINY_INT_HI;
 }
  
 export {

@@ -40,7 +40,11 @@ describe('vm', () => {
 	
 	it('can load a literal value', () => {
 		const v = 'foobar';
-		var m = new Buffer([ Op.IMM, 0, /* no pop */ Op.RETURN0 ]);
+		var m = new Buffer([ 
+			Op.IMM, 0, 
+			Op.RETURN0				// don't pop 
+		]);
+		
 		var p = newProgram(m, [], [v]);
 		var f = new Frame(p);
 		
@@ -52,11 +56,27 @@ describe('vm', () => {
 	});
 	
 	it('can suspend a frame', () => {
+		const v = 5;
+		
 		var main = new Buffer([
 			Op.IMM, 0, 				// suspend
-			Op.IMM, 1, 				// delay
-			tinyIntToOpCode(5),		// 5 seconds
-			Op.CALL_BI
+			tinyIntToOpCode(v),		// 5 seconds
+			Op.CALL_BI,				// suspend(5)
+			Op.RETURN0				// don't pop
 		]);
+		
+		var p = newProgram(main, [], ['suspend']);
+		var f = new Frame(p);
+		
+		var [r, cont, delayed] = exec(f);
+		
+		expect(r).toBe(0);
+		expect(cont).toBeNull();
+		expect(delayed[0].frame).toBe(f);
+		expect(delayed[0].delay).toBe(v);
+	});
+	
+	it('can fork frames', () => {
+		
 	});
 });

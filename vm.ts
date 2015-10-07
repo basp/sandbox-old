@@ -26,12 +26,12 @@ interface DelayedFrame {
 	delay: number;
 }
 
-function log(f: Frame, stuff: any) {
+function log(f: Frame, stuff: any): [any, Frame, DelayedFrame[]] {
 	console.log(stuff);
 	return [0, f, []];
 }
 
-function suspend(f: Frame, delay: number) {
+function suspend(f: Frame, delay: number): [any, Frame, DelayedFrame[]] {
 	var delayed = {
 		frame: f,
 		delay: delay
@@ -50,8 +50,11 @@ class VM {
 }
 
 function readInt8(f: Frame): number {
-	
 	return 0;
+}
+
+var bi = {
+	suspend: suspend
 }
 
 function exec(f: Frame): [any, Frame, DelayedFrame[]] {
@@ -62,12 +65,18 @@ function exec(f: Frame): [any, Frame, DelayedFrame[]] {
 		switch (op) {
 			case Op.IMM:
 				{
+					f.ip += 1;
 					let slot = readInt8(f);
 					let r = f.program.literals[slot];
 					f.stack.push(r);
 				}
 				break;
 			case Op.CALL_BI:
+				{
+					let args = f.stack.pop();
+					let fname = f.stack.pop();
+					return bi[fname](f, args);
+				}
 				break;
 			case Op.FORK:
 				break;
