@@ -66,27 +66,27 @@ function exec(f: Frame): [any, Frame, DelayedFrame[]] {
 		switch (op) {
 			case Op.IMM:
 				{
-					f.ip += 1;
-					let slot = readInt8(f);
-					let r = f.program.literals[slot];
-					f.stack.push(r);
+                    f.ip += 1;
+                    let slot = readInt8(f);
+                    let r = f.program.literals[slot];
+                    f.stack.push(r);
                     break;
 				}
 			case Op.CALL_BI:
 				{
-					let args = f.stack.pop();
-					let fname = f.stack.pop();
+                let args = f.stack.pop();
+                let fname = f.stack.pop();
 					return bi[fname](f, args);
 				}
 			case Op.FORK:
 				{
-					let delay = f.stack.pop();
-					let index = f.stack.pop();
-					let fork = {
-						frame: new Frame(f.program, index),
-						delay: delay
-					};
-					delayed.push(fork);
+                    let delay = f.stack.pop();
+                    let index = f.stack.pop();
+                    let fork = {
+                        frame: new Frame(f.program, index),
+                        delay: delay
+                    };
+                    delayed.push(fork);
                     break;
 				}
 			case Op.RETURN:
