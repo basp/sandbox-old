@@ -52,6 +52,11 @@ describe('vm', () => {
 	});
 	
 	it('can suspend a frame', () => {
-		
+		var main = new Buffer([
+			Op.IMM, 0, 				// suspend
+			Op.IMM, 1, 				// delay
+			tinyIntToOpCode(5),		// 5 seconds
+			Op.CALL_BI
+		]);
 	});
 });
