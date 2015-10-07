@@ -1,0 +1,22 @@
+{
+  "name": "sandbox",
+  "version": "1.0.0",
+  "description": "This is just for messing around with experimental stuff.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/basp/sandbox.git"
+  },
+  "author": "Bas Pennings",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/basp/sandbox/issues"
+  },
+  "homepage": "https://github.com/basp/sandbox#readme",
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "moment": "^2.10.6"
+  },
+  "devDependencies": {
+    "jasmine": "^2.3.2"
+  }
+}
