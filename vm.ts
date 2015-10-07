@@ -65,21 +65,21 @@ function exec(f: Frame): [any, Frame, DelayedFrame[]] {
 		let op = code[f.ip];
 		switch (op) {
 			case Op.IMM:
-				{
+                {
                     f.ip += 1;
                     let slot = readInt8(f);
                     let r = f.program.literals[slot];
                     f.stack.push(r);
                     break;
-				}
+                }
 			case Op.CALL_BI:
-				{
-                let args = f.stack.pop();
-                let fname = f.stack.pop();
-					return bi[fname](f, args);
-				}
+                {
+                    let args = f.stack.pop();
+                    let fname = f.stack.pop();
+                        return bi[fname](f, args);
+                }
 			case Op.FORK:
-				{
+                {
                     let delay = f.stack.pop();
                     let index = f.stack.pop();
                     let fork = {
@@ -88,21 +88,21 @@ function exec(f: Frame): [any, Frame, DelayedFrame[]] {
                     };
                     delayed.push(fork);
                     break;
-				}
+                }
 			case Op.RETURN:
-				{
-					let r = f.stack.pop();
-					return [r, null, delayed];
-				}
+                {
+                    let r = f.stack.pop();
+                    return [r, null, delayed];
+                }
 			case Op.RETURN0:
-				return [0, null, delayed];
+                return [0, null, delayed];
 			default:
-				if (isTinyIntOpCode(op)) {
-					f.stack.push(opCodeToTinyInt(op));
-				}
-				else {
-					throw new Error(`Invalid opcode: ${op}`);
-				}
+                if (isTinyIntOpCode(op)) {
+                    f.stack.push(opCodeToTinyInt(op));
+                }
+                else {
+                    throw new Error(`Invalid opcode: ${op}`);
+                }
 		}
 		
 		f.ip += 1; 
