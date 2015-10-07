@@ -110,5 +110,5 @@ describe('vm', () => {
         
         expect(delayed[1].delay).toBe(6);
         expect(delayed[1].frame.vector).toBe(1);
-    });
+    });    
 });

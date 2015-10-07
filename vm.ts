@@ -20,24 +20,16 @@ class Frame {
 		this.program = program;
 		this.vector = vector;
 	}
+    
+    code(): Buffer {
+        let code = this.vector == -1 ? this.program.main : this.program.forks[this.vector];
+        return code;    
+    }
 }
 
 interface DelayedFrame {
 	frame: Frame;
 	delay: number;
-}
-
-function log(f: Frame, stuff: any): [any, Frame, DelayedFrame[]] {
-	console.log(stuff);
-	return [0, f, []];
-}
-
-function suspend(f: Frame, delay: number): [any, Frame, DelayedFrame[]] {
-	var delayed = {
-		frame: f,
-		delay: delay
-	};
-	return [0, null, [delayed]]
 }
 
 class VM {
@@ -50,16 +42,13 @@ class VM {
 	}
 }
 
-function readInt8(f: Frame): number {
-	return 0;
-}
-
 var bi = {
+    log: log,
 	suspend: suspend
 }
 
 function exec(f: Frame): [any, Frame, DelayedFrame[]] {
-    var code = f.vector == -1 ? f.program.main : f.program.forks[f.vector];
+    var code = f.code();
     var delayed: DelayedFrame[] = [];
     while (true) {
         let op = code[f.ip];
@@ -76,7 +65,7 @@ function exec(f: Frame): [any, Frame, DelayedFrame[]] {
                 {
                     let args = f.stack.pop();
                     let fname = f.stack.pop();
-                        return bi[fname](f, args);
+                    return bi[fname](f, args);
                 }
             case Op.FORK:
                 {
@@ -96,6 +85,9 @@ function exec(f: Frame): [any, Frame, DelayedFrame[]] {
                 }
             case Op.RETURN0:
                 return [0, null, delayed];
+            case Op.POP:
+                f.stack.pop();
+                break;            
             default:
                 if (isTinyIntOpCode(op)) {
                     f.stack.push(opCodeToTinyInt(op));
@@ -113,4 +105,23 @@ export {
     Frame,
     Program, 
     exec 
+}
+
+function log(f: Frame, stuff: any): [any, Frame, DelayedFrame[]] {
+	console.log(stuff);
+	return [0, f, []];
+}
+
+function suspend(f: Frame, delay: number): [any, Frame, DelayedFrame[]] {
+	var delayed = {
+		frame: f,
+		delay: delay
+	};
+	return [0, null, [delayed]]
+}
+
+function readInt8(f: Frame): number {
+    var code = f.code();
+    var buf = code.slice(f.ip, f.ip + 1);
+    return utils.readInt32(buf); 
 }

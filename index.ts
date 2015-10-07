@@ -5,14 +5,22 @@ import {Op} from './opcodes';
 
 var p = {
 	main: new Buffer([
-		Op.RETURN0
+        Op.IMM, 0,
+        Op.IMM, 1,
+        Op.CALL_BI,
+        Op.POP,
+        Op.IMM, 0,
+        Op.IMM, 1,
+        Op.CALL_BI,
+		Op.RETURN
 	]),
 	forks: [],
 	literals: [
-		'foobar'
+                'log',
+                ['foo', 'bar', 'quux']
 	]
 };
 
 var f = new Frame(p);
-var r = exec(f);
+var [r, cont, delayed] = exec(f);
 console.log(r);

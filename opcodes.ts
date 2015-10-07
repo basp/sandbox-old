@@ -14,6 +14,7 @@ const enum Op {
     FORK_ID,
     RETURN,
     RETURN0,
+    POP,
     EXTENDED,
     TINY_INT_START,
     LAST_OP_CODE = 255
@@ -22,24 +23,6 @@ const enum Op {
 const TINY_INT_LOW = -10;
 const TINY_INT_HI = Op.LAST_OP_CODE - Op.TINY_INT_START + TINY_INT_LOW;
 
-/*
-function isOptimNumOpCode(o: OpCode): boolean {
-	return o >= OpCode.OptimNumStart;
-}
-
-function opCodeToOptimNum(o: OpCode): number {
-	return o - OpCode.OptimNumStart + OptimNumLow;
-}
-
-function optimNumToOpCode(i: number): OpCode {
-	return OpCode.OptimNumStart + i - OptimNumLow;
-}
-
-function inOptimNumRange(i: number): boolean {
-	return i >= OptimNumLow && i <= OptimNumHi;
-}
-*/
- 
 function isTinyIntOpCode(o: Op): boolean {
     return o >= Op.TINY_INT_START;
 }
