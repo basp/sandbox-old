@@ -188,6 +188,19 @@ The first versions of Ambiance implemented this operation as a special `Op`
 function. And with a few revisions it is also a builtin function now in
 Amiance.
 
+#### transparent box
+The VM and all things related to it should be testable. If this means making
+more methods visible than strictly desired we'll have to pay this price. It's 
+the reason why `exec1` has to be documented.
+
+The VM should not be a big huge thing. It should be a lightweight object that
+is easily and readily instantiated (or obtained). When you design this thing 
+you suddenly realize you need a lot of support services. It's tempting to make
+the VM big and bloated and try to provide them yourself but it's really much
+easier and much **much** more testable to inject each and everyone. Yes, your
+constructor will get messy but if it's really bad you can always use 
+dependency injection containers.  
+
 ### todo
 * Built-in function references should not be strings, they should be pointers
 into a function table.
