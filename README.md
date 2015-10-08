@@ -167,10 +167,16 @@ This slot will have the `Frame` to *immediately* resume execution on. Whatever
 happens, this is the number one priority because the client is expecting an 
 immediate response still.
 
+In the example above you can see we have a `cont` returned. Whenever we get one
+we should execute it as fast a as possible.
+
 ##### `delayed`
 This is an array of *delayed* frames. These are `DelayedFrame` instances that
 have a pointer to the `Frame` to execute and a delay time in seconds. The host
 is expected to push these onto a queue and execute them at a later point.    
+
+There are no delayed tasks in the example above (the `log` builtin is immediate)
+but the empty array is there.
 
 #### suspending
 One of the main features of LambdaMOO is the ability to `suspend` execution. 
