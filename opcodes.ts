@@ -1,5 +1,5 @@
 const enum Op {
-    IMM,
+    IMM,    
     IF,
     EQ, 
     NEQ,
