@@ -11,8 +11,9 @@ interface Program {
 
 class Frame {
     program: Program;
-    prev: Frame;
     vector: number;
+
+    prev: Frame = null;
     ip = 0;
     stack = [];
     
@@ -38,7 +39,7 @@ class VM {
         var top = f;
         while (top) {
             let [r, cont, forks] = exec(top);
-            delayed.push(forks);
+            delayed = delayed.concat(forks);
             if (cont) {
                 top = cont;
                 top.stack.push(r);
