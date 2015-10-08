@@ -24,6 +24,21 @@ general but also gives you some insight into how really low level stuff works,
 like virtual machines as well as dealing with more higher level things like 
 networking and persistence.
 
+### overview
+Currently, a `Program` has a `main` buffer and zero or more `forks`. It also 
+contains a `literals` array with values that can be lifted straight from the 
+source. As an example, the most basic you can construct looks like this:
+
+    var return0 = {
+        main: new Buffer([ Op.RETURN0 ]),
+        forks: [],
+        literals: []
+    };
+    
+The above program has only one instruction: `RETURN0` which does exactly what
+it says. Except of course the number `0` is wrapped in a `Val` instance of type
+`NUM`. A `Val` can be of type `NUM`, `STR`, `OBJ`, `LIST` or `ERR`. 
+
 ### todo
 * Built-in function references should not be strings, they should be pointers
 into a function table.
