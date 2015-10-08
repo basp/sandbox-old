@@ -27,7 +27,7 @@ var p = {
         Op.RETURN
 	]),
 	forks: [],
-	literals: [
+    literals: [
         Val.str('log'),
         Val.list([
             Val.str('foo'), 
@@ -38,7 +38,7 @@ var p = {
         Val.num(0),
         Val.str('suspend'),
         Val.num(5),
-	]
+    ]
 };
 
 var interpreter = new Interpreter();
