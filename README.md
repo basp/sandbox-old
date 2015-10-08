@@ -173,7 +173,11 @@ we should execute it as fast a as possible.
 ##### `delayed`
 This is an array of *delayed* frames. These are `DelayedFrame` instances that
 have a pointer to the `Frame` to execute and a delay time in seconds. The host
-is expected to push these onto a queue and execute them at a later point.    
+is expected to push these onto a queue and execute them at a later point.
+
+For example, we might `fork` (execute as a seperate task, possibly delayed) a few
+tasks and then decide to `suspend` our own task for a while. In this case
+the array of `delayed` frames will contain four `DelayedFrame` instances.   
 
 There are no delayed tasks in the example above (the `log` builtin is immediate)
 but the empty array is there.
