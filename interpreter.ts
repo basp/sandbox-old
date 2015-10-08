@@ -37,11 +37,11 @@ interface DelayedFrame {
 }
 
 class Interpreter {
-    run(f: Frame): [Val, DelayedFrame[]] {
+    exec(f: Frame): [Val, DelayedFrame[]] {
         var delayed = [];
         var top = f;
         while (top) {
-            let [r, cont, forks] = this.exec(top);
+            let [r, cont, forks] = this.exec1(top);
             delayed = delayed.concat(forks);
             if (cont) {
                 top = cont;
@@ -52,7 +52,7 @@ class Interpreter {
         }
     }
 
-    exec(f: Frame): [Val, Frame, DelayedFrame[]] {
+    exec1(f: Frame): [Val, Frame, DelayedFrame[]] {
         var code = f.code();
         var delayed: DelayedFrame[] = [];
         while (true) {
@@ -70,7 +70,7 @@ class Interpreter {
                         f.ip += 1;
                         let args = f.stack.pop();
                         let fname = f.stack.pop();
-                        return this[fname.v](f, args.v);
+                        return this[fname.v](f, args);
                     }
                 case Op.FORK:
                     {
@@ -107,15 +107,15 @@ class Interpreter {
         }
     }
     
-    log(f: Frame, stuff: any): [any, Frame, DelayedFrame[]] {
+    log(f: Frame, stuff: Val): [any, Frame, DelayedFrame[]] {
         console.log(stuff);
         return [Val.num(0), f, []];
     }
     
-    suspend(f: Frame, delay: number): [any, Frame, DelayedFrame[]] {
+    suspend(f: Frame, delay: Val): [any, Frame, DelayedFrame[]] {
         var delayed = {
             frame: f,
-            delay: delay
+            delay: delay.v
         };
 
     	return [Val.num(0), null, [delayed]]

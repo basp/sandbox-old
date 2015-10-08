@@ -24,7 +24,7 @@ describe('vm', () => {
         var p = newProgram(m);
         var f = new Frame(p);
     
-        var [r, cont, delayed] = interpreter.exec(f);
+        var [r, cont, delayed] = interpreter.exec1(f);
         
         expect(r.v).toBe(0);
         expect(f.stack.length).toBe(0);
@@ -39,7 +39,7 @@ describe('vm', () => {
         var f = new Frame(p);
         f.stack = [Val.str(v)];
         
-        var [r, cont, delayed] = interpreter.exec(f);
+        var [r, cont, delayed] = interpreter.exec1(f);
         
         expect(r.v).toBe(v);
         expect(f.stack.length).toBe(0);
@@ -57,7 +57,7 @@ describe('vm', () => {
         var p = newProgram(m, [], [v]);
         var f = new Frame(p);
         
-        var [r, cont, delayed] = interpreter.exec(f);
+        var [r, cont, delayed] = interpreter.exec1(f);
         
         expect(r.v).toBe(0);
         expect(f.stack.length).toBe(1);
@@ -78,7 +78,7 @@ describe('vm', () => {
         var p = newProgram(main, [], [Val.str('suspend')]);
         var f = new Frame(p);
         
-        var [r, cont, delayed] = interpreter.exec(f);
+        var [r, cont, delayed] = interpreter.exec1(f);
         
         expect(r.v).toBe(0);
         expect(cont).toBeNull();
@@ -106,7 +106,7 @@ describe('vm', () => {
         var p = newProgram(main, forks);
         var f = new Frame(p);
         
-        var [r, cont, delayed] = interpreter.exec(f);
+        var [r, cont, delayed] = interpreter.exec1(f);
         
         expect(r.v).toBe(0);
         expect(cont).toBeNull();

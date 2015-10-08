@@ -43,5 +43,25 @@ var p = {
 
 var interpreter = new Interpreter();
 var f = new Frame(p);
-var [r, forks] = interpreter.run(f);
-console.log(forks);
+// var [r, delayed] = interpreter.exec(f);
+// console.log(delayed);
+
+var ex = new Buffer([
+    Op.IMM, 0, 0, 0, 0,     // 'log'
+    Op.IMM, 0, 0, 0, 1,     // ['foo', 'bar', 'quux']
+    Op.CALL_BI,
+    Op.RETURN
+]);
+
+p = {
+    main: ex,
+    forks: [],
+    literals: [
+        Val.str('log'),
+        Val.list([Val.str('foo'), Val.str('bar')])
+    ]
+}
+
+f = new Frame(p);
+var [r, cont, delayed] = interpreter.exec1(f);
+console.log([r, cont, delayed]);
