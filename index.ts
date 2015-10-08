@@ -1,6 +1,6 @@
 /// <reference path="typings/tsd.d.ts" />
 
-import {exec, Frame} from './vm';
+import {exec, VM, Frame} from './vm';
 import {Op} from './opcodes';
 
 var p = {
@@ -12,7 +12,7 @@ var p = {
         Op.IMM, 0,
         Op.IMM, 1,
         Op.CALL_BI,
-		Op.RETURN
+        Op.RETURN
 	]),
 	forks: [],
 	literals: [
@@ -21,6 +21,7 @@ var p = {
 	]
 };
 
+var vm = new VM();
 var f = new Frame(p);
-var [r, cont, delayed] = exec(f);
-console.log(r);
+var [r, forks] = vm.exec(f);
+console.log([r, forks]);

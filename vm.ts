@@ -34,11 +34,18 @@ interface DelayedFrame {
 
 class VM {
     exec(f: Frame): [any, DelayedFrame[]] {
-        return [0, []];	
-    }
-        
-    private execOne(f: Frame): [any, Frame, DelayedFrame[]] {
-        return [0, null, []];
+        var delayed = [];
+        var top = f;
+        while (top) {
+            let [r, cont, forks] = exec(top);
+            delayed.push(forks);
+            if (cont) {
+                top = cont;
+                top.stack.push(r);
+            } else {
+                return [r, delayed];
+            }
+        }
     }
 }
 
@@ -62,6 +69,7 @@ function exec(f: Frame): [any, Frame, DelayedFrame[]] {
                 }
             case Op.CALL_BI:
                 {
+                    f.ip += 1;
                     let args = f.stack.pop();
                     let fname = f.stack.pop();
                     return bi[fname](f, args);
@@ -80,10 +88,10 @@ function exec(f: Frame): [any, Frame, DelayedFrame[]] {
             case Op.RETURN:
                 {
                     let r = f.stack.pop();
-                    return [r, null, delayed];
+                    return [r, f.prev, delayed];
                 }
             case Op.RETURN0:
-                return [0, null, delayed];
+                return [0, f.prev, delayed];
             case Op.POP:
                 f.stack.pop();
                 break;            
@@ -121,25 +129,24 @@ function readInt8(f: Frame): number {
     return utils.readInt32(buf); 
 }
 
-// NOTE: Do not use the `read` stuff below here please.
-
 function readInt16(f: Frame): number {
     f.ip += 1;
     var code = f.code();
     var buf = code.slice(f.ip, f.ip + 2);
+    f.ip += 1;
     return utils.readInt32(buf);
-    // f.ip += 1;
 }
 
 function readInt32(f: Frame): number {
     f.ip += 1;
     var code = f.code();
     var buf = code.slice(f.ip, f.ip + 4);
+    f.ip += 3;
     return utils.readInt32(buf);
-    // f.ip += 3;
 }
 
 export {
+    VM,
     Frame,
     Program, 
     exec 
