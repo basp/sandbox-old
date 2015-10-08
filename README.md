@@ -178,7 +178,7 @@ is expected to push these onto a queue and execute them at a later point.
 For example, we might `fork` (execute as a seperate task, possibly delayed) 
 three tasks and then decide to `suspend` our own task for a while. In this 
 case the array of `delayed` frames will contain four `DelayedFrame` 
-\instances.   
+instances.   
 
 There are no delayed tasks in the example above (the `log` builtin is immediate)
 but the empty array is there.
